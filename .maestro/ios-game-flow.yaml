@@ -1,0 +1,49 @@
+appId: native.matchimals.fun
+---
+- launchApp
+
+# Turn on/off music
+- assertVisible: "HOW MANY PLAYERS?"
+- tapOn: "TURN MUSIC ON"
+- assertVisible: "TURN MUSIC OFF"
+- tapOn: "TURN MUSIC OFF"
+- assertVisible: "TURN MUSIC ON"
+
+# Start a new game
+- tapOn:
+    point: "32%,54%" # taps on an animal
+- assertVisible: "Matchimals"
+- assertVisible: "PASS"
+- assertVisible: "0"
+- assertVisible: "?"
+
+# Help > Turn on/off music & back to game button
+- tapOn: "?"
+- assertNotVisible: "?"
+- assertVisible: "TURN MUSIC ON"
+- assertVisible: "SCROLL TO CENTER"
+- assertVisible: "EXIT TO MAIN MENU"
+- assertVisible: "BACK TO GAME"
+- tapOn: "TURN MUSIC ON"
+- assertVisible: "TURN MUSIC OFF"
+- tapOn: "TURN MUSIC OFF"
+- assertVisible: "TURN MUSIC ON"
+- tapOn: "BACK TO GAME"
+- assertVisible: "?"
+
+# Move the board
+- swipe:
+    direction: LEFT
+    duration: 500
+
+# Help > Scrool to center
+- tapOn: "?"
+- assertNotVisible: "?"
+- tapOn: "SCROLL TO CENTER"
+- assertVisible: "?"
+
+# Help > Go to main menu
+- tapOn: "?"
+- assertNotVisible: "?"
+- tapOn: "EXIT TO MAIN MENU"
+- assertVisible: "HOW MANY PLAYERS?"

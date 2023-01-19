@@ -1,0 +1,10 @@
+appId: native.matchimals.fun
+---
+- launchApp
+
+# Turn on/off music
+- assertVisible: "HOW MANY PLAYERS?"
+- tapOn: "TURN MUSIC ON"
+- assertVisible: "TURN MUSIC OFF"
+- tapOn: "TURN MUSIC OFF"
+- assertVisible: "TURN MUSIC ON"
