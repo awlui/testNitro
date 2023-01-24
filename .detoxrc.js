@@ -38,6 +38,20 @@ module.exports = {
         "cd android ; ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=release ; cd -",
     },
   },
+  artifacts: {
+    plugins: {
+      log: { enabled: true },
+      uiHierarchy: "enabled",
+      screenshot: {
+        shouldTakeAutomaticSnapshots: true,
+        keepOnlyFailedTestsArtifacts: true,
+        takeWhen: {
+          testStart: false,
+          testDone: true,
+        },
+      },
+    },
+  },
   devices: {
     simulator: {
       type: "ios.simulator",
@@ -54,7 +68,7 @@ module.exports = {
     emulator: {
       type: "android.emulator",
       device: {
-        avdName: "Pixel_6_Pro_API_33",
+        avdName: "emulator",
       },
     },
   },
