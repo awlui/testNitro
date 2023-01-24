@@ -63,6 +63,7 @@ const Menu = ({ startGame }) => {
 
         {Platform.OS !== "web" && music && (
           <Button
+            testID="music-switch"
             onPress={() => music?.setPaused(!music?.paused)}
             style={{
               position: "absolute",

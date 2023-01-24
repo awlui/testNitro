@@ -59,8 +59,8 @@ export default function App() {
   });
 
   return (
-    <SafeAreaProvider>
-      <MusicProvider>
+    <MusicProvider>
+      <SafeAreaProvider>
         <PlayerProvider>
           <View style={styles.root}>
             <StatusBar hidden />
@@ -71,8 +71,8 @@ export default function App() {
             )}
           </View>
         </PlayerProvider>
-      </MusicProvider>
-    </SafeAreaProvider>
+      </SafeAreaProvider>
+    </MusicProvider>
   );
 }
 
