@@ -7,7 +7,7 @@ workflows:
     description: Run Detox tests for iOS
     meta:
       bitrise.io:
-        stack: osx-xcode-14.1.x
+        stack: osx-xcode-14.2.x-ventura
     steps:
       - activate-ssh-key@4:
           run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
@@ -57,6 +57,71 @@ workflows:
 
                 detox test --configuration android.emu.release --cleanup
       - deploy-to-bitrise-io@2: {}
+
+  nitro-maestro-ios:
+    description: Run Maestro tests for iOS
+    meta:
+      bitrise.io:
+        stack: osx-xcode-14.2.x-ventura
+    steps:
+      - activate-ssh-key@4:
+          run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+      - git-clone@7: {}
+      - nitro-ios@4: {}
+      - script@1:
+          inputs:
+            - content: |-
+                #!/bin/bash
+                set -ex
+
+                echo "Installing Maestro"
+                curl -Ls "https://get.maestro.mobile.dev" | bash
+                export PATH="${PATH}":"${HOME}/.maestro/bin"
+
+                echo "Installing Maestro dependencies"
+                brew tap facebook/fb
+                brew install facebook/fb/idb-companion
+
+                echo "Launching iOS Simulator and install the app"
+                xcrun simctl boot "iPhone 14"
+                xcrun simctl install booted "${NITRO_APP_PATH}"
+
+                echo "Running tests with Maestro"
+                maestro test .maestro/ios-home-flow.yaml \
+                    --format junit \
+                    --output "${BITRISE_DEPLOY_DIR}/e2e-report.xml"
+      - deploy-to-bitrise-io@2: {}
+
+  nitro-maestro-android:
+    meta:
+      bitrise.io:
+        stack: linux-docker-android-20.04
+    steps:
+      - activate-ssh-key@4:
+          run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+      - git-clone@6: {}
+      - nitro-android@4: {}
+      - avd-manager@1: {}
+      - wait-for-android-emulator@1: {}
+      - script:
+          title: Install Maestro deps and run tests
+          inputs:
+            - content: |-
+                #!/bin/bash
+                set -e
+
+                echo "Installing Maestro"
+                curl -Ls "https://get.maestro.mobile.dev" | bash
+                export PATH="${PATH}":"${HOME}/.maestro/bin"
+
+                echo "Installing app from ${NITRO_APP_PATH}"
+                adb install "${NITRO_APP_PATH}"
+
+                echo "Running tests with Maestro"
+                maestro test .maestro/android-home-flow.yaml \
+                    --format junit \
+                    --output "${BITRISE_DEPLOY_DIR}/e2e-report.xml"
+
 meta:
   bitrise.io:
-    stack: osx-xcode-14.1.x
+    stack: osx-xcode-14.2.x-ventura
