@@ -1,0 +1,62 @@
+---
+format_version: "11"
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+project_type: other
+workflows:
+  nitro-detox-ios:
+    description: Run Detox tests for iOS
+    meta:
+      bitrise.io:
+        stack: osx-xcode-14.1.x
+    steps:
+      - activate-ssh-key@4:
+          run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+      - git-clone@6: {}
+      - yarn@0:
+          inputs:
+            - command: global add detox-cli react-native-cli
+      - brew-install@0:
+          inputs:
+            - brewfile_path: e2e/Brewfile
+            - cache_enabled: "yes"
+            - use_brewfile: "yes"
+      - nitro-ios@4:
+          inputs:
+            - detox_configuration: ios.sim.release
+      - script:
+          inputs:
+            - content: |-
+                #!/bin/bash
+
+                detox test --configuration ios.sim.release --cleanup
+      - deploy-to-bitrise-io@2: {}
+
+  nitro-detox-android:
+    description: Run Detox tests for Android
+    meta:
+      bitrise.io:
+        stack: linux-docker-android-20.04
+    steps:
+      - activate-ssh-key@4:
+          run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+      - git-clone@6: {}
+      - yarn@0:
+          inputs:
+            - command: global add detox-cli react-native-cli
+      - nitro-android@4:
+          inputs:
+            - detox_configuration: android.emu.release
+      - avd-manager@1:
+          inputs:
+            - api_level: "30"
+      - wait-for-android-emulator@1: {}
+      - script:
+          inputs:
+            - content: |-
+                #!/bin/bash
+
+                detox test --configuration android.emu.release --cleanup
+      - deploy-to-bitrise-io@2: {}
+meta:
+  bitrise.io:
+    stack: osx-xcode-14.1.x
