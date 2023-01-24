@@ -46,9 +46,7 @@ workflows:
       - nitro-android@4:
           inputs:
             - detox_configuration: android.emu.release
-      - avd-manager@1:
-          inputs:
-            - api_level: "30"
+      - avd-manager@1: {}
       - wait-for-android-emulator@1: {}
       - script:
           inputs:
