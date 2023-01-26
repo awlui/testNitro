@@ -1,0 +1,26 @@
+name: nitor-detox-android
+on: [push]
+jobs:
+  build:
+    runs-on: self-hosted
+    env:
+      NITRO_API_KEY: ${{ secrets.NITRO_API_KEY }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Detox dependencies
+        run: |
+          yarn global add detox-cli react-native-cli
+      - uses: nitro-build/github-action-nitro-android@v1
+        id: nitro
+        with:
+          detox-configuration: android.emu.release
+      - name: Run Detox Test(s)
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 31
+          arch: x86_64
+          avd-name: emulator
+          script: detox test --configuration android.emu.release --cleanup --headless
+      - uses: actions/upload-artifact@v3
+        with:
+          path: ${{ steps.nitro.outputs.nitro-output-dir }}
