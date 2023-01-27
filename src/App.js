@@ -82,6 +82,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: Platform.OS === "web" ? "100vh" : "100%",
     overflow: "hidden",
-    backgroundColor: colors.grayDark,
+    backgroundColor: colors.grayMedium,
   },
 });
