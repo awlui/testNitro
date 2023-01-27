@@ -1,0 +1,35 @@
+name: nitro-maestro-ios
+on: [push]
+jobs:
+  build:
+    runs-on: self-hosted
+    env:
+      NITRO_API_KEY: ${{ secrets.NITRO_API_KEY }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: nitro-build/github-action-nitro-ios@v1
+        id: nitro
+      - name: Run Maestro e2e Test(s)
+        run: |
+          set -e
+
+          echo "Installing Maestro"
+          curl -Ls "https://get.maestro.mobile.dev" | bash
+          export PATH="${PATH}":"${HOME}/.maestro/bin"
+
+          echo "Installing Maestro dependencies"
+          brew bundle install --file=.maestro/Brewfile
+
+          echo "Launching iOS Simulator"
+          xcrun simctl boot "iPhone 14"
+
+          echo "Installing app from ${{ steps.nitro.outputs.nitro-app-path }}"
+          xcrun simctl install booted "${{ steps.nitro.outputs.nitro-app-path }}"
+
+          echo "Running tests with Maestro"
+          maestro test .maestro/ios-home-flow.yaml \
+            --format junit \
+            --output "${{ steps.nitro.outputs.nitro-output-dir }}"/maestro-e2e-report.xml
+      - uses: actions/upload-artifact@v3
+        with:
+          path: ${{ steps.nitro.outputs.nitro-output-dir }}
