@@ -1,4 +1,4 @@
-name: nitro-detox-android
+name: nitro-maestro-android
 on: workflow_dispatch
 jobs:
   build:
@@ -7,20 +7,15 @@ jobs:
       NITRO_API_KEY: ${{ secrets.NITRO_API_KEY }}
     steps:
       - uses: actions/checkout@v3
-      - name: Install Detox dependencies
-        run: |
-          yarn global add detox-cli react-native-cli
       - uses: nitro-build/github-action-nitro-android@v1
         id: nitro
-        with:
-          detox-configuration: android.emu.release
-      - name: Run Detox Test(s)
+      - name: Install Maestro and run e2e tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 31
           arch: x86_64
           avd-name: emulator
-          script: detox test --configuration android.emu.release --cleanup --headless
+          script: .maestro/run-android.sh "${{ steps.nitro.outputs.nitro-app-path }}" .maestro/android-home-flow.yaml "${{ steps.nitro.outputs.nitro-output-dir }}"/maestro-e2e-report.xml
       - uses: actions/upload-artifact@v3
         with:
           path: ${{ steps.nitro.outputs.nitro-output-dir }}
