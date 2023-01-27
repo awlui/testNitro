@@ -1,4 +1,4 @@
-name: nitor-detox-android
+name: nitro-detox-android
 on: [push]
 jobs:
   build:
