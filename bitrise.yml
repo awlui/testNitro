@@ -20,7 +20,7 @@ workflows:
             - brewfile_path: e2e/Brewfile
             - cache_enabled: "yes"
             - use_brewfile: "yes"
-      - nitro-ios@4:
+      - git::https://github.com/nitro-build/bitrise-step-nitro-ios.git@4.5.0-beta.1:
           inputs:
             - detox_configuration: ios.sim.release
       - script:
@@ -43,7 +43,7 @@ workflows:
       - yarn@0:
           inputs:
             - command: global add detox-cli react-native-cli
-      - nitro-android@4:
+      - git::https://github.com/nitro-build/bitrise-step-nitro-android.git@4.5.0-beta.1:
           inputs:
             - detox_configuration: android.emu.release
       - avd-manager@1: {}
@@ -65,7 +65,7 @@ workflows:
       - activate-ssh-key@4:
           run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
       - git-clone@7: {}
-      - nitro-ios@4: {}
+      - git::https://github.com/nitro-build/bitrise-step-nitro-ios.git@4.5.0-beta.1: {}
       - script@1:
           inputs:
             - content: |-
@@ -98,7 +98,7 @@ workflows:
       - activate-ssh-key@4:
           run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
       - git-clone@6: {}
-      - nitro-android@4: {}
+      - git::https://github.com/nitro-build/bitrise-step-nitro-android.git@4.5.0-beta.1: {}
       - avd-manager@1: {}
       - wait-for-android-emulator@1: {}
       - script:
