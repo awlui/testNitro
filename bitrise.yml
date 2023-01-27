@@ -11,7 +11,7 @@ workflows:
     steps:
       - activate-ssh-key@4:
           run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-      - git-clone@6: {}
+      - git-clone@7: {}
       - yarn@0:
           inputs:
             - command: global add detox-cli react-native-cli
@@ -39,7 +39,7 @@ workflows:
     steps:
       - activate-ssh-key@4:
           run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-      - git-clone@6: {}
+      - git-clone@7: {}
       - yarn@0:
           inputs:
             - command: global add detox-cli react-native-cli
@@ -97,36 +97,31 @@ workflows:
     steps:
       - activate-ssh-key@4:
           run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-      - git-clone@6: {}
-      - git::https://github.com/nitro-build/bitrise-step-nitro-android.git@3f31691be59053f52a1fee9b167d120da11160ec:
+      - git-clone@7: {}
+      - git::https://github.com/nitro-build/bitrise-step-nitro-android.git@test:
           inputs:
             - debug: true
             - verbose: true
+      - avd-manager@1: {}
+      - wait-for-android-emulator@1: {}
       - script:
-          title: Print environment vars
+          title: Install Maestro deps and run tests
           inputs:
             - content: |-
-                printenv
-      # - avd-manager@1: {}
-      # - wait-for-android-emulator@1: {}
-      # - script:
-      #     title: Install Maestro deps and run tests
-      #     inputs:
-      #       - content: |-
-      #           #!/bin/bash
-      #           set -e
+                #!/bin/bash
+                set -e
 
-      #           echo "Installing Maestro"
-      #           curl -Ls "https://get.maestro.mobile.dev" | bash
-      #           export PATH="${PATH}":"${HOME}/.maestro/bin"
+                echo "Installing Maestro"
+                curl -Ls "https://get.maestro.mobile.dev" | bash
+                export PATH="${PATH}":"${HOME}/.maestro/bin"
 
-      #           echo "Installing app from ${NITRO_APP_PATH}"
-      #           adb install "${NITRO_APP_PATH}"
+                echo "Installing app from ${NITRO_APP_PATH}"
+                adb install "${NITRO_APP_PATH}"
 
-      #           echo "Running tests with Maestro"
-      #           maestro test .maestro/android-home-flow.yaml \
-      #               --format junit \
-      #               --output "${BITRISE_DEPLOY_DIR}/e2e-report.xml"
+                echo "Running tests with Maestro"
+                maestro test .maestro/android-home-flow.yaml \
+                    --format junit \
+                    --output "${BITRISE_DEPLOY_DIR}/e2e-report.xml"
 
 meta:
   bitrise.io:
