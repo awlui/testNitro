@@ -7,7 +7,7 @@ jobs:
       NITRO_API_KEY: ${{ secrets.NITRO_API_KEY }}
     steps:
       - uses: actions/checkout@v3
-      - uses: nitro-build/github-action-nitro-android@v1
+      - uses: nitro-build/github-action-nitro-android@62290c01827edad07baefdc038357de3beefc04f
         id: nitro
       - name: Install Maestro and run e2e tests
         uses: reactivecircus/android-emulator-runner@v2
