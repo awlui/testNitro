@@ -10,7 +10,7 @@ jobs:
       - name: Install Detox dependencies
         run: |
           yarn global add detox-cli react-native-cli
-      - uses: nitro-build/github-action-nitro-android@62290c01827edad07baefdc038357de3beefc04f
+      - uses: nitro-build/github-action-nitro-android@v1
         id: nitro
         with:
           detox-configuration: android.emu.release

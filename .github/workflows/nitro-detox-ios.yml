@@ -11,7 +11,7 @@ jobs:
         run: |
           yarn global add detox-cli react-native-cli
           brew bundle install --file=e2e/Brewfile
-      - uses: nitro-build/github-action-nitro-ios@afd7a0d243ea8e607974d0b71a969b0238b214a9
+      - uses: nitro-build/github-action-nitro-ios@v1
         id: nitro
         with:
           detox-configuration: ios.sim.release
