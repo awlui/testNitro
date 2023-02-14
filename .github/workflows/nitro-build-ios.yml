@@ -1,0 +1,21 @@
+name: nitro-build-ios
+on: workflow_dispatch
+jobs:
+  build:
+    runs-on: self-hosted
+    env:
+      NITRO_API_KEY: ${{ secrets.NITRO_API_KEY }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: nitro-build/github-action-nitro-ios@v1
+        id: nitro
+        with:
+          export-method: "development"
+          certificate-base64: "${{ secrets.IOS_DEVELOPMENT_CERTIFICATE_BASE64 }}"
+          certificate-passphrase: "${{ secrets.IOS_DEVELOPMENT_CERTIFICATE_PASSWORD }}"
+          codesigning-identity: "iPhone Developer: Juan Pablo Garcia (N9XXV269GE)"
+          provisioning-profiles-base64: "${{ secrets.IOS_DEVELOPMENT_PROVISIONING_PROFILE_BASE64 }}"
+          provisioning-profile-specifier: "matchimals fun (jpg development)"
+      - uses: actions/upload-artifact@v3
+        with:
+          path: ${{ steps.nitro.outputs.nitro-output-dir }}

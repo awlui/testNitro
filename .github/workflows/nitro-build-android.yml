@@ -1,0 +1,14 @@
+name: nitro-build-android
+on: workflow_dispatch
+jobs:
+  build:
+    runs-on: self-hosted
+    env:
+      NITRO_API_KEY: ${{ secrets.NITRO_API_KEY }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: nitro-build/github-action-nitro-android@v1
+        id: nitro
+      - uses: actions/upload-artifact@v3
+        with:
+          path: ${{ steps.nitro.outputs.nitro-output-dir }}
