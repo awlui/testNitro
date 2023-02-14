@@ -416,7 +416,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = native.matchimals.fun;
 				PRODUCT_NAME = Matchimals;
-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore native.matchimals.fun";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
