@@ -20,7 +20,7 @@ workflows:
             - brewfile_path: e2e/Brewfile
             - cache_enabled: "yes"
             - use_brewfile: "yes"
-      - git::https://github.com/nitro-build/bitrise-step-nitro-ios.git@4.6.0-beta.2:
+      - git::https://github.com/nitro-build/bitrise-step-nitro-ios.git@4.6.0-beta.3:
           inputs:
             - detox_configuration: ios.sim.release
       - script:
@@ -65,7 +65,7 @@ workflows:
       - activate-ssh-key@4:
           run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
       - git-clone@7: {}
-      - git::https://github.com/nitro-build/bitrise-step-nitro-ios.git@4.6.0-beta.2: {}
+      - git::https://github.com/nitro-build/bitrise-step-nitro-ios.git@4.6.0-beta.3: {}
       - script@1:
           inputs:
             - content: |-
