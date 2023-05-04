@@ -1,0 +1,23 @@
+name: nitro-detox-ios
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: macos-12
+    env:
+      NITRO_API_KEY: ${{ secrets.NITRO_API_KEY }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Detox dependencies
+        run: |
+          yarn global add detox-cli react-native-cli
+          brew bundle install --file=e2e/Brewfile
+      - uses: nitro-build/github-action-nitro-ios@v1
+        with:
+          detox-configuration: ios.sim.release
+      - name: Run tests with Detox
+        run: |
+          detox test --configuration ios.sim.release --cleanup --headless
+      - uses: actions/upload-artifact@v3
+        with:
+          path: ${{ steps.nitro.outputs.nitro-output-dir }}
